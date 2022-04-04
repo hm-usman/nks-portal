@@ -178,7 +178,7 @@
 	<script src="{{ asset('js/metisMenu.min.js') }}"></script>
 	<script src="{{ asset('js/perfect-scrollbar.js') }}"></script>
 	<script src="{{ asset('js/theme.js') }}"></script>
-	<script src="{{ asset('js/app.js') }}"></script>
+	<script src="{{ asset('js/app.js') }}" defer></script>
   <script>
     function copyAdcode(id) {
       var copyText = document.getElementById(id);

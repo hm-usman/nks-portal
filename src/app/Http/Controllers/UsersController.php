@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Auth;
 
@@ -26,7 +27,7 @@ class UsersController extends Controller
 
         $employees = $emps->orderBy('id', 'DESC')->paginate(50);
 
-        return view('admin.employees', compact('employees', 'status'));
+        return view('employees.index', compact('employees', 'status'));
 
     }
 
@@ -35,7 +36,7 @@ class UsersController extends Controller
         if(!$id){
             $id = Auth::id();
         }
-        return view('user.profile', ['user' => User::findOrFail($id)]);
+        return view('employees.profile', ['user' => User::findOrFail($id)]);
     }
 
     /**
@@ -45,7 +46,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('user.create');
+        return view('employees.create');
     }
 
     /**
@@ -68,7 +69,7 @@ class UsersController extends Controller
         
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         $user->phone = $request->phone;
         $user->designation = $request->designation;
         $user->status = $request->status;
@@ -150,5 +151,10 @@ class UsersController extends Controller
         User::findOrFail($id)->delete();
 
         return redirect()->back()->with('status', 'Employee Deleted');
+    }
+
+    public function setting()
+    {
+        return view('employees.setting');
     }
 }

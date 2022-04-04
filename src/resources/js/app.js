@@ -1,9 +1,12 @@
+require('./bootstrap');
+
 import Vue from 'vue';
 
-Vue.component('payout-form', require('./components/PayoutForm.vue').default);
-Vue.component('ad-code', require('./components/Adcode.vue').default);
+Vue.component('messenger', require('./components/Messanger.vue').default);
+Vue.component('navbar-messenger', require('./components/NavBarMessenger.vue').default);
 
-let app = new Vue({
+const app = new Vue({
     el: '#app',
-
+      
 });
+

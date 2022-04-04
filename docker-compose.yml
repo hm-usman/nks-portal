@@ -88,6 +88,25 @@ services:
     entrypoint: ['php', '/var/www/html/artisan']
     networks:
       - laravel
+  
+  websocket:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+    container_name: websocket
+    volumes:
+      - ./src:/var/www/html:delegated
+    depends_on:
+      - mysql
+    working_dir: /var/www/html
+    # entrypoint: ['php', '/var/www/html/artisan']
+    command: ["sh", "-c", "php /var/www/html/artisan websockets:serve --host=0.0.0.0"]
+    ports:
+      - "6001:6001"
+    expose:
+      - "6001"
+    networks:
+      - laravel
 
   mailhog:
     image: mailhog/mailhog:latest

@@ -1,8 +1,11 @@
 @extends('layouts.app')
 @section('content')
 @if (session('status'))
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-      {{ session('status') }}
+  <div class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button> 
+    {{ session('status') }}
   </div>
 @endif
 <div class="row">
@@ -71,7 +74,7 @@
         <h4 class="card-title d-flex justify-content-between">
           Tasks
           @can('isAdmin')
-            <button class="btn btn-sm btn-primary mb-3 float-right" data-bs-toggle="modal" data-bs-target="#exampleModal">New Task </button>
+            <button class="btn btn-sm btn-primary mb-3 float-right" data-toggle="modal" data-target="#exampleModal">New Task </button>
           @endcan
         </h4>
         <!-- Modal -->
@@ -80,7 +83,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Create Task</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">×</span>
                 </button>
               </div>
@@ -113,7 +116,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="submit" class="btn btn-success">Submit</button>
-                  <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
                 </div>
               </form>
             </div>
@@ -128,7 +131,6 @@
                 <th>Assigned at</th>
                 <th>Due Date</th>
                 <th>Submitted at</th>
-                <th>Completed at</th>
                 <th>File</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -142,7 +144,6 @@
                 <td>{{ date('M d, Y g:iA',strtotime($task->created_at)) }}</td>
                 <td>{{ date('M d, Y g:iA',strtotime($task->due_date)) }}</td>
                 <td>{{ $task->submitted_at ? date('M d, Y g:iA',strtotime($task->submitted_at)) : '-' }}</td>
-                <td>{{ $task->completed_at ? date('M d, Y g:iA',strtotime($task->completed_at)) : '-' }}</td>
                 <td>
                   @can('isAdmin')
                     @if ($task->uploaded_file)
@@ -174,7 +175,7 @@
                             " 
                             type="button" 
                             id="status{{$task->id}}" 
-                            data-bs-toggle="dropdown" 
+                            data-toggle="dropdown" 
                             aria-haspopup="true" 
                             aria-expanded="false">
                             @if ($task->status == '1')
@@ -216,8 +217,9 @@
                   </div>
                 </td>
                 <td>
-                  <a  class="btn btn-sm btn-info btn-rounded btn-icon" 
-                      data-bs-toggle="modal" data-bs-target="#time{{$task->id}}">
+                  <a  href="javascript:void(0)"
+                      class="btn mb-1 btn-rounded btn-outline-secondary" 
+                      data-toggle="modal" data-target="#time{{$task->id}}">
                       <i class="mdi mdi-timer"></i>
                   </a>
                   <div class="modal fade show" id="time{{$task->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true" role="dialog">
@@ -225,7 +227,7 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="exampleModalLabel">Tasks Timeline</h5>
-                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                           </button>
                         </div>
@@ -406,13 +408,14 @@
                                     <hr />
                                 </div>
                           {{-- <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                           </div> --}}
                       </div>
                     </div>
                   </div>
-                  <a  class="btn btn-sm btn-primary btn-rounded btn-icon" 
-                      data-bs-toggle="modal" data-bs-target="#view{{$task->id}}">
+                  <a  href="javascript:void(0)"
+                      class="btn mb-1 btn-rounded btn-outline-primary" 
+                      data-toggle="modal" data-target="#view{{$task->id}}">
                       <i class="mdi mdi-eye"></i>
                   </a>
                   <div class="modal fade show" id="view{{$task->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true" role="dialog">
@@ -420,7 +423,7 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="exampleModalLabel">Task Details</h5>
-                          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                           </button>
                         </div>
@@ -456,14 +459,14 @@
                           </div>
                           <div class="modal-footer">
                             <button type="submit" class="btn btn-success">Update</button>
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
                           </div>
                         </form>
                       </div>
                     </div>
                   </div>
                   @can('isAdmin')
-                    <a  class="btn btn-sm btn-danger btn-rounded btn-icon" 
+                    <a  class="btn mb-1 btn-rounded btn-outline-danger" 
                         href="{{route('delete-task', ['id'=>$task->id])}}" 
                         onclick="return confirm('Are you sure you want to delete {{$task->title}}')">
                         <i class="mdi mdi-delete-forever"></i>

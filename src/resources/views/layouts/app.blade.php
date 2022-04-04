@@ -1,156 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>NSKHOST </title>
-  <!-- plugins:css -->
-  <link rel="stylesheet" href="{{ asset('vendors/feather/feather.css') }}">
-  <link rel="stylesheet" href="{{ asset('vendors/mdi/css/materialdesignicons.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('vendors/ti-icons/css/themify-icons.css') }}">
-  <link rel="stylesheet" href="{{ asset('vendors/typicons/typicons.css') }}">
-  <link rel="stylesheet" href="{{ asset('vendors/simple-line-icons/css/simple-line-icons.css') }}">
-  <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.base.css') }}">
-  <!-- endinject -->
-  <!-- Plugin css for this page -->
-  <link rel="stylesheet" href="{{ asset('vendors/datatables.net-bs4/dataTables.bootstrap4.css') }}">
-  <link rel="stylesheet" href="{{ asset('js/select.dataTables.min.css') }}">
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
-  <link rel="stylesheet" href="{{ asset('css/vertical-layout-light/style.css') }}">
-  <!-- endinject -->
-  <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>NSKHOST</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/favicon.png')}}">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
 </head>
 <body>
-  <div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
-    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-        <div class="me-3">
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
-            <span class="icon-menu"></span>
-          </button>
-        </div>
-        <div>
-          <a class="navbar-brand brand-logo" href="/">
-            {{-- <img src="{{ asset('images/logo.svg' ) }}" alt="logo" /> --}}
-            <b>NSKHOST</b>
-          </a>
-          <a class="navbar-brand brand-logo-mini" href="/">
-            {{-- <img src="{{ asset('images/logo-mini.svg' ) }}" alt="logo" /> --}}
-          </a>
-        </div>
+  <div id="app">
+
+  <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+      <div class="loader">
+          <svg class="circular" viewBox="25 25 50 50">
+              <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+          </svg>
       </div>
-      <div class="navbar-menu-wrapper d-flex align-items-top"> 
-        <ul class="navbar-nav">
-          <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-            <h1 class="welcome-text">
-              @if(date("H") < 12)
- 
-                Good Morning
-            
-              @elseif(date("H") > 11 && date("H") < 18)
-            
-                Good Afternoon,
-            
-              @elseif(date("H") > 17)
-            
-                Good Evening,
-            
-              @endif
-              <span class="text-black fw-bold">{{Auth::user()->name}}</span></h1>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item dropdown d-none d-lg-block user-dropdown">
-            <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-              <img class="img-xs rounded-circle" src="/images/employees/{{Auth::user()->photo}}" alt="Profile image"> </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-              <div class="dropdown-header text-center">
-                <p class="mb-1 mt-3 font-weight-semibold">{{Auth::user()->name}}</p>
-                <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
-              </div>
-              <a class="dropdown-item" href="{{route('my-profile')}}"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> My Profile </a>
-              {{-- <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-message-text-outline text-primary me-2"></i> Messages <span class="badge badge-pill badge-danger">1</span></a> --}}
-              <a class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>
-                Sign Out
-              </a>
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-              </form>
-            </div>
-          </li>
-        </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
-          <span class="mdi mdi-menu"></span>
-        </button>
-      </div>
-    </nav>
-    <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
-        <ul class="nav">
-          @can('isAdmin')
-            <li class="nav-item">
-              <a class="nav-link" href="/admin/employees">
-                <i class="mdi mdi-grid-large menu-icon"></i>
-                <span class="menu-title">Employees</span>
-              </a>
-            </li>
-          @endcan
-          <li class="nav-item">
-            <a class="nav-link" href="/tasks">
-              <i class="mdi mdi-grid-large menu-icon"></i>
-              <span class="menu-title">Tasks</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <!-- partial -->
-      <div class="main-panel">
-        <div class="content-wrapper">
-          @yield('content')
-        </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:partials/_footer.html -->
-        <footer class="footer">
-          <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">NSKHOST</span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
-          </div>
-        </footer>
-        <!-- partial -->
-      </div>
-      <!-- main-panel ends -->
-    </div>
-    <!-- page-body-wrapper ends -->
   </div>
-  <!-- container-scroller -->
+  <!--*******************
+      Preloader end
+  ********************-->
+  <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
 
-  <!-- plugins:js -->
-  <script src="{{ asset('vendors/js/vendor.bundle.base.js') }}"></script>
-  <!-- endinject -->
-  <!-- Plugin js for this page -->
-  <script src="{{ asset('vendors/chart.js/Chart.min.js') }}"></script>
-  <script src="{{ asset('vendors/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
-  <script src="{{ asset('vendors/progressbar.js/progressbar.min.js') }}"></script>
+      <!--**********************************
+          Nav header start
+      ***********************************-->
+      <div class="nav-header">
+          <div class="brand-logo">
+              <a href="/">
+                  <b class="logo-abbr"><img src="{{asset('images/nsk-250.png')}}" alt="" style="width: 200"> </b>
+                  <span class="logo-compact"><img src="{{asset('images/nsk-250.png')}}" alt=""></span>
+                  <span class="brand-title">
+                      <img src="{{asset('images/nsk-250.png')}}" alt="" style="width: 200px">
+                  </span>
+              </a>
+          </div>
+      </div>
+      <!--**********************************
+          Nav header end
+      ***********************************-->
 
-  <!-- End plugin js for this page -->
-  <!-- inject:js -->
-  <script src="{{ asset('js/off-canvas.js') }}"></script>
-  <script src="{{ asset('js/hoverable-collapse.js') }}"></script>
-  <script src="{{ asset('js/template.js') }}"></script>
-  <script src="{{ asset('js/settings.js') }}"></script>
-  <script src="{{ asset('js/todolist.js') }}"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="{{ asset('js/jquery.cookie.js') }}" type="text/javascript"></script>
-  <script src="{{ asset('js/dashboard.js') }}"></script>
-  <script src="{{ asset('js/Chart.roundedBarCharts.js') }}"></script>
-  <!-- End custom js for this page-->
+      <!--**********************************
+          Header start
+      ***********************************-->
+      <div class="header">    
+          <div class="header-content clearfix">
+              
+              <div class="nav-control">
+                  <div class="hamburger">
+                      <span class="toggle-icon"><i class="icon-menu"></i></span>
+                  </div>
+              </div>
+              <div class="header-left">
+                  
+              </div>
+              <div class="header-right">
+                  <ul class="clearfix">
+                      <navbar-messenger user="{{auth::user()}}"></navbar-messenger>
+                      <li class="icons dropdown"><a href="javascript:void(0)" data-toggle="dropdown">
+                              <i class="mdi mdi-bell-outline"></i>
+                              <span class="badge badge-pill gradient-2">3</span>
+                          </a>
+                          <div class="drop-down animated fadeIn dropdown-menu dropdown-notfication">
+                              <div class="dropdown-content-heading d-flex justify-content-between">
+                                  <span class="">2 New Notifications</span>  
+                                  <a href="javascript:void()" class="d-inline-block">
+                                      <span class="badge badge-pill gradient-2">5</span>
+                                  </a>
+                              </div>
+                              <div class="dropdown-content-body">
+                                  <ul>
+                                      <li>
+                                          <a href="javascript:void()">
+                                              <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
+                                              <div class="notification-content">
+                                                  <h6 class="notification-heading">Events near you</h6>
+                                                  <span class="notification-text">Within next 5 days</span> 
+                                              </div>
+                                          </a>
+                                      </li>
+                                      <li>
+                                          <a href="javascript:void()">
+                                              <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
+                                              <div class="notification-content">
+                                                  <h6 class="notification-heading">Event Started</h6>
+                                                  <span class="notification-text">One hour ago</span> 
+                                              </div>
+                                          </a>
+                                      </li>
+                                      <li>
+                                          <a href="javascript:void()">
+                                              <span class="mr-3 avatar-icon bg-success-lighten-2"><i class="icon-present"></i></span>
+                                              <div class="notification-content">
+                                                  <h6 class="notification-heading">Event Ended Successfully</h6>
+                                                  <span class="notification-text">One hour ago</span>
+                                              </div>
+                                          </a>
+                                      </li>
+                                      <li>
+                                          <a href="javascript:void()">
+                                              <span class="mr-3 avatar-icon bg-danger-lighten-2"><i class="icon-present"></i></span>
+                                              <div class="notification-content">
+                                                  <h6 class="notification-heading">Events to Join</h6>
+                                                  <span class="notification-text">After two days</span> 
+                                              </div>
+                                          </a>
+                                      </li>
+                                  </ul>
+                                  
+                              </div>
+                          </div>
+                      </li>
+                      <li class="icons dropdown">
+                          <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
+                              <span class="activity active"></span>
+                              <img src="/images/employees/{{Auth::user()->photo}}" height="40" width="40" alt="">
+                          </div>
+                          <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
+                              <div class="dropdown-content-body">
+                                  <ul>
+                                      <li>
+                                          <a href="{{route('my-profile')}}"><i class="icon-user"></i> <span>Profile</span></a>
+                                      </li>
+                                      <li>
+                                          <a href="{{route('settings')}}">
+                                              <i class="icon-wrench"></i> <span>Settings</span>
+                                          </a>
+                                      </li>
+                                      
+                                      <hr class="my-2">
+                                        <li>
+                                          <a href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="icon-key"></i> <span>Logout</span></a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                @csrf
+                                            </form>
+                                        </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <!--**********************************
+          Header end ti-comment-alt
+      ***********************************-->
+
+      <!--**********************************
+          Sidebar start
+      ***********************************-->
+      <div class="nk-sidebar">           
+          <div class="nk-nav-scroll">
+              <ul class="metismenu" id="menu">
+                  <li class="nav-label">Dashboard</li>
+                  @can('isAdmin')
+                  <li>
+                    <a href="/admin/employees" aria-expanded="false">
+                        <i class="icon-user menu-icon"></i><span class="nav-text">Employees</span>
+                    </a>
+                  </li>
+                  @endcan  
+                  <li>
+                    <a href="/tasks" aria-expanded="false">
+                        <i class="icon-note menu-icon"></i><span class="nav-text">Tasks</span>
+                    </a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+      <!--**********************************
+          Sidebar end
+      ***********************************-->
+
+      <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+
+          <div class="container-fluid">
+            @yield('content')
+          </div>
+          <!-- #/ container -->
+      </div>
+      <!--**********************************
+          Content body end
+      ***********************************-->
+    <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+          <div class="copyright">
+              <p>Copyright &copy; <a href="https://nskhost.com">NSKHOST</a> {{date('Y')}}</p>
+          </div>
+      </div>
+      <!--**********************************
+          Footer end
+      ***********************************-->
+  </div>
+  <!--**********************************
+      Main wrapper end
+  ***********************************-->
+
+  </div>
+  <!--**********************************
+        Scripts
+    ***********************************-->
+    <script src="{{ asset('js/app.js')}}"></script>
+    <script src="{{ asset('plugins/common/metismenu.min.js')}}"></script>
+    <script src="{{ asset('js/settings.js') }}"></script>
+    <script src="{{ asset('js/custom.min.js')}}"></script>
+    <script src="{{ asset('js/gleek.js')}}"></script>
+    <script src="{{ asset('js/styleSwitcher.js')}}"></script>
+
+
 </body>
 
 </html>

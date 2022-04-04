@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\Auth\ChangePasswordController;
+use App\Http\Controllers\ChatController;
 
 Auth::routes([
 	'reset' => false,
@@ -34,3 +35,20 @@ Route::post('/upload-file/{id}', [TaskController::class,'uploadFile'])->name('up
 
 Route::get('/my-profile', [UsersController::class,'profile'])->name('my-profile')->middleware('auth');
 Route::post('/my-profile/{id}', [UsersController::class,'update'])->name('update-profile')->middleware('can:isUser');
+
+Route::get('/settings', [UsersController::class, 'setting'])->name('settings')->middleware('can:isUser');
+Route::post('/change-password', [ChangePasswordController::class, 'store'])->name('change.password');
+
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('/fetch-messages/{receiver}', [ChatController::class, 'fetchMessages']);
+    Route::post('/msg-seen/{id}', [ChatController::class,'seen']);
+    Route::get('/get-connects', [ChatController::class,'getConnects']);
+    Route::get('/get-connects-navbar', [ChatController::class,'getConnectsNavbar']);
+    Route::get('/messenger', [ChatController::class,'messenger']);
+    Route::post('/messages/{id}', [ChatController::class,'sendMessage']);
+    Route::post('/sendMessengerText/{id}', [ChatController::class, 'sendMessengerText']);
+    Route::post('/last-active/{id}', [ChatController::class,'lastActive']);
+    Route::get('/searchChat/{str}', [ChatController::class, 'search']);
+
+});
+
